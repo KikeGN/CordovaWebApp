@@ -20,6 +20,7 @@ var app = {
     // Application Constructor
     initialize: function() {
         document.addEventListener('deviceready', this.onDeviceReady.bind(this), false);
+
     },
 
     // deviceready Event Handler
@@ -27,40 +28,96 @@ var app = {
     // Bind any cordova events here. Common events are:
     // 'pause', 'resume', etc.
     onDeviceReady: function() {
-        this.receivedEvent('deviceready');
+
+        console.log(navigator.camera);
+         var i = 0;
+       var colors = ["black", "darkGray", "lightGray", "white", "gray", "red", "green", "blue", "cyan", "yellow", "magenta", "orange", "purple", "brown"];
+
+
+ document.getElementById("foto").addEventListener("click", function () {
+              navigator.camera.getPicture(onSuccess, onFail, { quality: 50,destinationType: Camera.DestinationType.FILE_URI });
+        });
+
+        document.getElementById("conexion").addEventListener("click", function () {
+                     navigator.vibrate(3000);
+                     checkConnection();
+
+                });
+                document.getElementById("regis").addEventListener("click", function () {
+                                     navigator.notification.beep(1);
+                                     function onConfirm(buttonIndex) {
+
+                                     }
+                                    navigator.notification.confirm(
+                                        'Se registro corectamente!', // message
+                                         onConfirm,            // callback to invoke with index of button pressed
+                                        'Usuario',           // title
+                                        ['Aceptar','Salir']     // buttonLabels
+                                    );
+                                });
+              /*
+
+
+
+
+
+
+                       navigator.vibrate(3000);
+
+                       }
+*/
+
+                function onSuccess(imageURI)
+                {
+                    var image = document.getElementById('imagen');
+                    image.src = imageURI;
+                }
+
+                        function onFail(message) {
+                            alert('Failed because: ' + message);
+                        }
+
+                        //network
+                        function checkConnection() {
+                            var networkState = navigator.connection.type;
+
+                            var states = {};
+                            states[Connection.UNKNOWN]  = 'Unknown connection';
+                            states[Connection.ETHERNET] = 'Ethernet connection';
+                            states[Connection.WIFI]     = 'WiFi connection';
+                            states[Connection.CELL_2G]  = 'Cell 2G connection';
+                            states[Connection.CELL_3G]  = 'Cell 3G connection';
+                            states[Connection.CELL_4G]  = 'Cell 4G connection';
+                            states[Connection.CELL]     = 'Cell generic connection';
+                            states[Connection.NONE]     = 'No network connection';
+
+                            alert('Connection type: ' + states[networkState]);
+                        }
+
+
+                function registrarse()
+                       {
+                          alert("REGISTRADO CORECTAMENTE");
+
+                       }
+
+
     },
 
     // Update DOM on a Received Event
 
      receivedEvent: function(id) {
-            var parentElement = document.getElementById(id);
-            var listeningElement = parentElement.querySelector('.listening');
-            var receivedElement = parentElement.querySelector('.received');
+      var parentElement = document.getElementById(id);
+             var listeningElement = parentElement.querySelector('.listening');
+             var receivedElement = parentElement.querySelector('.received');
 
-            listeningElement.setAttribute('style', 'display:none;');
-            receivedElement.setAttribute('style', 'display:block;');
+             listeningElement.setAttribute('style', 'display:none;');
+             receivedElement.setAttribute('style', 'display:block;');
 
-            console.log('Received Event: ' + id);
-      // function capturePhoto()
-       {
-            navigator.camera.getPicture(onSuccess, onFail, { quality: 50,destinationType: Camera.DestinationType.FILE_URI });
+             console.log('Received Event: ' + id);
 
-       //}
-       checkConnection();
-       navigator.notification.beep(2);
 
-       
 
-       navigator.notification.prompt(
-           'Please enter your name',  // message
-           onPrompt,                  // callback to invoke
-           'Registration',            // title
-           ['Ok','Exit'],             // buttonLabels
-           'Jane Doe'                 // defaultText
-       );
-       navigator.vibrate(3000);
-
-       }
 
 
 
@@ -68,38 +125,6 @@ var app = {
 };
 
 
-function onSuccess(imageURI)
-{
-    var image = document.getElementById('imagen');
-    image.src = imageURI;
-}
 
-        function onFail(message) {
-            alert('Failed because: ' + message);
-        }
-
-        //network
-        function checkConnection() {
-            var networkState = navigator.connection.type;
-
-            var states = {};
-            states[Connection.UNKNOWN]  = 'Unknown connection';
-            states[Connection.ETHERNET] = 'Ethernet connection';
-            states[Connection.WIFI]     = 'WiFi connection';
-            states[Connection.CELL_2G]  = 'Cell 2G connection';
-            states[Connection.CELL_3G]  = 'Cell 3G connection';
-            states[Connection.CELL_4G]  = 'Cell 4G connection';
-            states[Connection.CELL]     = 'Cell generic connection';
-            states[Connection.NONE]     = 'No network connection';
-
-            alert('Connection type: ' + states[networkState]);
-        }
-
-
-function registrarse()
-       {
-          alert("REGISTRADO CORECTAMENTE");
-
-       }
 
 app.initialize();
